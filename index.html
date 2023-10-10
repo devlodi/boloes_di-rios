@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banners bolões diarios</title>
+    <style>
+        /* Adicione seu CSS aqui */
+        .banner {
+            border: 2px solid #000;
+            margin: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="banners"></div>
+
+<script>
+    
+    // URL da sua planilha
+const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRISpWPTwJ4injNHN8jPJxhNOf9W-u8SrovI6_8G2pAQtRaxBaVareODZFXScsD5Yhnbes1fGIDLKW8/pub?output=csv';
+
+// Função para buscar os dados da planilha e criar os banners
+async function fetchAndCreateBanners() {
+    const response = await fetch(url);
+    const csvText = await response.text();
+    const rows = csvText.split('\n').slice(1);  // Ignora o cabeçalho
+    const bannersDiv = document.getElementById('banners');
+
+    rows.forEach(row => {
+        const columns = row.split(',');
+        const bannerDiv = document.createElement('div');
+        bannerDiv.className = 'banner';
+        bannerDiv.innerHTML = `
+            <h2>${columns[2]}</h2>  <!-- Nome do Bolão -->
+            <p>${columns[3]}</p>  <!-- Descrição -->
+            <p>Concurso: ${columns[4]}</p>
+            <p>Data: ${columns[5]}</p>
+            <p>Quantidade de Cotas: ${columns[6]}</p>
+            <p>Preço da Cota: ${columns[7]}</p>
+            <p>Prêmio: ${columns[8]}</p>
+        `;
+        bannersDiv.appendChild(bannerDiv);
+    });
+}
+
+// Chama a função ao carregar a página
+window.onload = fetchAndCreateBanners;
+
+</script>
+</body>
+</html>
