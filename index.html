@@ -126,9 +126,24 @@
 
     @media (max-width: 768px) {
         .report-content, #total-price {
-            width: 50%; /* Largura maior para dispositivos pequenos */
+            width: 65%; /* Largura maior para dispositivos pequenos */
         }
     }
+
+.feedback {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #008CBA;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: none;
+    z-index: 1000;
+}
+
+    
 </style>
 
 </head>
@@ -138,6 +153,8 @@
         Clique no Carrinho para finalizar sua reserva (<span id="cart-count">0</span>)
     </div>
 </header>
+
+    <div id="feedback" class="feedback">Item adicionado ao carrinho!</div>
 
 
 <div id="banners" class="banner-container"></div>
@@ -222,11 +239,12 @@ function addToCart(bolao, preco) {
     cartItems.push({ bolao, preco: cleanPrice(preco) });
     document.getElementById('cart-count').textContent = cartItems.length;
     // Adicionando feedback visual
-    const cartIcon = document.querySelector('.cart::before');
-    cartIcon.style.backgroundColor = '#008CBA';
+   // Feedback
+    const feedback = document.getElementById('feedback');
+    feedback.style.display = 'block';
     setTimeout(() => {
-        cartIcon.style.backgroundColor = '';
-    }, 300);
+        feedback.style.display = 'none';
+    }, 3000);  // A mensagem será ocultada após 3 segundos
 }
 
 function showCartReport() {
