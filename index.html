@@ -50,11 +50,67 @@
     }
 }
 
+        .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.banner button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #008CBA;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cart-report {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding-top: 60px;
+}
+
+.report-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    width: 80%;
+}
+
+#total-price {
+    margin-top: 10px;
+}
+
     </style>
 </head>
 <body>
+<header id="header">
+    <div id="cart" class="cart">
+        Carrinho (<span id="cart-count">0</span>)
+    </div>
+</header>
 
-<div id="banners"></div>
+<div id="banners" class="banner-container"></div>
+
+<div id="cart-report" class="cart-report">
+    <button onclick="closeReport()">Fechar</button>
+    <h2>Relatório do Carrinho</h2>
+    <div id="report-content"></div>
+    <div id="total-price"></div>
+    <button onclick="sendToWhatsApp()">Mandar pedido pelo WhatsApp</button>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script>
@@ -98,6 +154,42 @@ async function fetchAndCreateBanners() {
 }
 
 window.onload = fetchAndCreateBanners;
+
+    let cartItems = [];
+
+function addToCart(bolao, preco) {
+    cartItems.push({ bolao, preco });
+    document.getElementById('cart-count').textContent = cartItems.length;
+}
+
+function showCartReport() {
+    const reportContent = document.getElementById('report-content');
+    reportContent.innerHTML = '';
+    let totalPrice = 0;
+    cartItems.forEach(item => {
+        reportContent.innerHTML += `<p>${item.bolao}: R$ ${item.preco}</p>`;
+        totalPrice += parseFloat(item.preco);
+    });
+    document.getElementById('total-price').textContent = 'Total: R$ ' + totalPrice.toFixed(2);
+    document.getElementById('cart-report').style.display = 'block';
+}
+
+function closeReport() {
+    document.getElementById('cart-report').style.display = 'none';
+}
+
+function sendToWhatsApp() {
+    let message = 'Marcelo, quero reservar os bolões:\n';
+    cartItems.forEach(item => {
+        message += `${item.bolao}: R$ ${item.preco}\n`;
+    });
+    const totalPrice = cartItems.reduce((sum, item) => sum + parseFloat(item.preco), 0);
+    message += `Total: R$ ${totalPrice.toFixed(2)}`;
+    const whatsappUrl = `https://wa.me/5551984036223?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+}
+
+document.getElementById('cart').addEventListener('click', showCartReport);
 
 </script>
 </body>
