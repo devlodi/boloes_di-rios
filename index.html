@@ -8,8 +8,20 @@
     body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    padding: 20px;
+        padding-top: 50px; /* Ajuste este valor conforme necessário para a altura do seu cabeçalho */
+
 }
+.cart-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+/* ... restante do seu CSS ... */
 
 .banner-container {
     display: flex;
@@ -96,11 +108,12 @@
     </style>
 </head>
 <body>
-<header id="header">
+<header id="header" class="cart-header">
     <div id="cart" class="cart">
         Carrinho (<span id="cart-count">0</span>)
     </div>
 </header>
+
 
 <div id="banners" class="banner-container"></div>
 
