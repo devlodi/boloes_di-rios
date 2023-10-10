@@ -33,18 +33,20 @@ async function fetchAndCreateBanners() {
         header: true,
         skipEmptyLines: true,
         complete: function(results) {
+            console.log(results);  // Logar os resultados para o console
             const rows = results.data;
             const bannersDiv = document.getElementById('banners');
 
             rows.forEach(row => {
-                const description = row['DESCRIÇÃO'].replace(/\/\//g, '<br>');  // Substitui // por quebras de linha
+                console.log(row);  // Logar cada linha para o console
+                const description = row['DESCRIÇÃO'] ? row['DESCRIÇÃO'].replace(/\/\//g, '<br>') : '';  // Verifica se 'DESCRIÇÃO' é definido antes de chamar replace
                 const bannerDiv = document.createElement('div');
                 bannerDiv.className = 'banner';
                 bannerDiv.innerHTML = `
                     <div class="header">${row['NOME DO BOLÃO']}</div>
                     <p><strong>Loteria:</strong> ${row['LOTERIA']}</p>
                     <p><strong>Grupo:</strong> ${row['GRUPO']}</p>
-                    <p><strong>Descrição:</strong> ${'DESCRIÇÃO'}</p>
+                    <p><strong>Descrição:</strong> ${description}</p>
                     <p><strong>Concurso:</strong> ${row['CONCURSO']}</p>
                     <p><strong>Data:</strong> ${row['DATA']}</p>
                     <p><strong>Quantidade de Cotas:</strong> ${row['QUANTIDADE DE COTAS']}</p>
@@ -58,6 +60,7 @@ async function fetchAndCreateBanners() {
 }
 
 window.onload = fetchAndCreateBanners;
+
 
     
 </script>
