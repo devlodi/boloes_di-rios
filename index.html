@@ -12,24 +12,33 @@
 
 }
 
-.cart-report {
-    display: block; /* alterado de none para block */
-    transform: translateY(-100%);
-    transition: transform 0.3s ease-in-out;
-    position: fixed;
-    top: 50px; /* ajuste conforme necessário para a altura do seu cabeçalho */
-    left: 0;
-    right: 0;
-    background-color: #fff;
-    overflow: auto;
-    max-height: calc(100% - 50px); /* ajuste conforme necessário para a altura do seu cabeçalho */
-}
-.cart-report.open {
-    transform: translateY(0);
-}
+   .cart-report {
+            transform: translateY(-100%);
+            transition: transform 0.3s ease-in-out;
+            position: fixed;
+            top: 50px;  /* ajuste conforme necessário para a altura do seu cabeçalho */
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            overflow: auto;
+            max-height: calc(100% - 50px);  /* ajuste conforme necessário para a altura do seu cabeçalho */
+        }
 
+        .cart-report.open {
+            transform: translateY(0);
+        }
 
         
+.cart-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
 /* ... restante do seu CSS ... */
 
 .banner-container {
@@ -201,23 +210,22 @@ function addToCart(bolao, preco) {
 }
 
 function showCartReport() {
-    const reportContent = document.getElementById('report-content');
-    reportContent.innerHTML = '';
-    let totalPrice = 0;
-    cartItems.forEach(item => {
-        reportContent.innerHTML += `<p>${item.bolao}: R$ ${item.preco.toFixed(2)}</p>`;
-        totalPrice += item.preco;
-    });
-    document.getElementById('total-price').textContent = 'Total: R$ ' + totalPrice.toFixed(2);
-    document.getElementById('cart-report').classList.add('open');
-}
+            const reportContent = document.getElementById('report-content');
+            reportContent.innerHTML = '';
+            let totalPrice = 0;
+            cartItems.forEach(item => {
+                reportContent.innerHTML += `<p>${item.bolao}: R$ ${item.preco.toFixed(2)}</p>`;
+                totalPrice += item.preco;
+            });
+            document.getElementById('total-price').textContent = 'Total: R$ ' + totalPrice.toFixed(2);
+            document.getElementById('cart-report').classList.add('open');
+        }
 
-function closeReport() {
-    document.getElementById('cart-report').classList.remove('open');
-}
+        function closeReport() {
+            document.getElementById('cart-report').classList.remove('open');
+        }
 
-document.getElementById('cart').addEventListener('click', showCartReport);
-
+        document.getElementById('cart').addEventListener('click', showCartReport);
 
 function sendToWhatsApp() {
     let message = 'Marcelo, quero reservar os bolões:\n';
