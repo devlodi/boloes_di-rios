@@ -12,6 +12,7 @@
 
 }
 .cart-header {
+        font-size: 1.2em;
     position: fixed;
     top: 0;
     left: 0;
@@ -21,7 +22,15 @@
     padding: 10px;
     text-align: center;
 }
-/* ... restante do seu CSS ... */
+        .cart {
+    display: flex;
+    align-items: center;
+}
+
+.cart::before {
+    content: url('caminho/para/seu/iconede/carrinho.png'); /* Substitua pelo caminho para o seu ícone de carrinho */
+    margin-right: 10px;
+}
 
 .banner-container {
     display: flex;
@@ -77,6 +86,13 @@
 }
 
 .cart-report {
+      background-color: #fff; /* Fundo branco para o relatório */
+    border-radius: 10px; /* Borda arredondada */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra para dar um efeito de elevação */
+    max-width: 500px; /* Largura máxima para manter o relatório legível */
+    margin: auto; /* Centralizar o relatório */
+    padding: 20px; /* Espaçamento interno */
+    overflow-y: auto; /* Barra de rolagem se o conteúdo for longo */
     display: none;
     position: fixed;
     top: 0;
@@ -86,7 +102,11 @@
     background-color: rgba(0, 0, 0, 0.5);
     padding-top: 60px;
 }
-
+.report-content, #total-price {
+    border-bottom: 1px solid #ddd; /* Linha divisória */
+    padding-bottom: 10px; /* Espaçamento */
+    margin-bottom: 10px; /* Espaçamento */
+}
 .report-content {
     background-color: #fff;
     margin: 5% auto;
@@ -97,6 +117,28 @@
 #total-price {
     margin-top: 10px;
 }
+
+        .cart-report button {
+    background-color: #008CBA;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px; /* Espaçamento acima dos botões */
+}
+
+.cart-report button:hover {
+    background-color: #006699; /* Cor de fundo ao passar o mouse */
+}
+
+        @media (max-width: 768px) {
+    .cart-report {
+        width: 90%; /* Largura maior para dispositivos pequenos */
+    }
+}
+
 
     </style>
 </head>
@@ -189,6 +231,12 @@ window.onload = fetchAndCreateBanners;
 function addToCart(bolao, preco) {
     cartItems.push({ bolao, preco: cleanPrice(preco) });
     document.getElementById('cart-count').textContent = cartItems.length;
+    // Adicionando feedback visual
+    const cartIcon = document.querySelector('.cart::before');
+    cartIcon.style.backgroundColor = '#008CBA';
+    setTimeout(() => {
+        cartIcon.style.backgroundColor = '';
+    }, 300);
 }
 
 function showCartReport() {
