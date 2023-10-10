@@ -144,6 +144,10 @@ async function fetchAndCreateBanners() {
                         <p><strong>Preço da Cota:</strong> ${row['PREÇO DA COTA']}</p>
                         <p><strong>Prêmio:</strong> ${row['PRÊMIO']}</p>
                     `;
+                    const addToCartButton = document.createElement('button');
+                    addToCartButton.textContent = 'Colocar no carrinho';
+                    addToCartButton.addEventListener('click', () => addToCart(row['NOME DO BOLÃO'], row['PREÇO DA COTA']));
+                    bannerDiv.appendChild(addToCartButton);  // Adiciona o botão ao banner
                     bannersDiv.appendChild(bannerDiv);
                 });
             }
@@ -152,6 +156,7 @@ async function fetchAndCreateBanners() {
         console.error('Erro ao buscar e criar banners:', error);
     }
 }
+
 
 window.onload = fetchAndCreateBanners;
 
