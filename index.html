@@ -201,22 +201,23 @@ function addToCart(bolao, preco) {
 }
 
 function showCartReport() {
-            const reportContent = document.getElementById('report-content');
-            reportContent.innerHTML = '';
-            let totalPrice = 0;
-            cartItems.forEach(item => {
-                reportContent.innerHTML += `<p>${item.bolao}: R$ ${item.preco.toFixed(2)}</p>`;
-                totalPrice += item.preco;
-            });
-            document.getElementById('total-price').textContent = 'Total: R$ ' + totalPrice.toFixed(2);
-            document.getElementById('cart-report').classList.add('open');
-        }
+    const reportContent = document.getElementById('report-content');
+    reportContent.innerHTML = '';
+    let totalPrice = 0;
+    cartItems.forEach(item => {
+        reportContent.innerHTML += `<p>${item.bolao}: R$ ${item.preco.toFixed(2)}</p>`;
+        totalPrice += item.preco;
+    });
+    document.getElementById('total-price').textContent = 'Total: R$ ' + totalPrice.toFixed(2);
+    document.getElementById('cart-report').classList.add('open');
+}
 
-        function closeReport() {
-            document.getElementById('cart-report').classList.remove('open');
-        }
+function closeReport() {
+    document.getElementById('cart-report').classList.remove('open');
+}
 
-        document.getElementById('cart').addEventListener('click', showCartReport);
+document.getElementById('cart').addEventListener('click', showCartReport);
+
 
 function sendToWhatsApp() {
     let message = 'Marcelo, quero reservar os bolões:\n';
