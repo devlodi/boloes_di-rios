@@ -69,8 +69,8 @@ async function fetchAndCreateBanners() {
             const bannersDiv = document.getElementById('banners');
 
             rows.forEach(row => {
-                // Verifique se a descrição existe e substitua as quebras de linha por <br>
-                const description = row['DESCRIÇÃO'] ? row['DESCRIÇÃO'].replace(/\n/g, '<br>') : '';
+                // Verifique se a descrição existe e substitua // por <br>
+                const description = row['DESCRIÇÃO'] ? row['DESCRIÇÃO'].replace(/\/\//g, '<br>') : '';
                 const bannerDiv = document.createElement('div');
                 bannerDiv.className = 'banner';
                 bannerDiv.innerHTML = `
@@ -91,9 +91,6 @@ async function fetchAndCreateBanners() {
 }
 
 window.onload = fetchAndCreateBanners;
-
-
-    
 </script>
 </body>
 </html>
