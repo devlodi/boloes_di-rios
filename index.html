@@ -57,40 +57,47 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script>
-async function fetchAndCreateBanners() {
-    const response = await fetch(url);
-    const csvText = await response.text();
-    
-    Papa.parse(csvText, {
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-            const rows = results.data;
-            const bannersDiv = document.getElementById('banners');
+const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRISpWPTwJ4injNHN8jPJxhNOf9W-u8SrovI6_8G2pAQtRaxBaVareODZFXScsD5Yhnbes1fGIDLKW8/pub?output=csv';
 
-            rows.forEach(row => {
-                // Verifique se a descrição existe e substitua // por <br>
-                const description = row['DESCRIÇÃO'] ? row['DESCRIÇÃO'].replace(/\/\//g, '<br>') : '';
-                const bannerDiv = document.createElement('div');
-                bannerDiv.className = 'banner';
-                bannerDiv.innerHTML = `
-                    <div class="header">${row['NOME DO BOLÃO']}</div>
-                    <p><strong>Loteria:</strong> ${row['LOTERIA']}</p>
-                    <p><strong>Grupo:</strong> ${row['GRUPO']}</p>
-                    <p><strong>Descrição:</strong> ${description}</p>
-                    <p><strong>Concurso:</strong> ${row['CONCURSO']}</p>
-                    <p><strong>Data:</strong> ${row['DATA']}</p>
-                    <p><strong>Quantidade de Cotas:</strong> ${row['QUANTIDADE DE COTAS']}</p>
-                    <p><strong>Preço da Cota:</strong> ${row['PREÇO DA COTA']}</p>
-                    <p><strong>Prêmio:</strong> ${row['PRÊMIO']}</p>
-                `;
-                bannersDiv.appendChild(bannerDiv);
-            });
-        }
-    });
+async function fetchAndCreateBanners() {
+    try {
+        const response = await fetch(url);
+        const csvText = await response.text();
+        
+        Papa.parse(csvText, {
+            header: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                const rows = results.data;
+                const bannersDiv = document.getElementById('banners');
+
+                rows.forEach(row => {
+                    // Verifique se a descrição existe e substitua as quebras de linha por <br>
+                    const description = row['DESCRIÇÃO'] ? row['DESCRIÇÃO'].replace(/\n/g, '<br>') : '';
+                    const bannerDiv = document.createElement('div');
+                    bannerDiv.className = 'banner';
+                    bannerDiv.innerHTML = `
+                        <div class="header">${row['NOME DO BOLÃO']}</div>
+                        <p><strong>Loteria:</strong> ${row['LOTERIA']}</p>
+                        <p><strong>Grupo:</strong> ${row['GRUPO']}</p>
+                        <p><strong>Descrição:</strong> ${description}</p>
+                        <p><strong>Concurso:</strong> ${row['CONCURSO']}</p>
+                        <p><strong>Data:</strong> ${row['DATA']}</p>
+                        <p><strong>Quantidade de Cotas:</strong> ${row['QUANTIDADE DE COTAS']}</p>
+                        <p><strong>Preço da Cota:</strong> ${row['PREÇO DA COTA']}</p>
+                        <p><strong>Prêmio:</strong> ${row['PRÊMIO']}</p>
+                    `;
+                    bannersDiv.appendChild(bannerDiv);
+                });
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao buscar e criar banners:', error);
+    }
 }
 
 window.onload = fetchAndCreateBanners;
+
 </script>
 </body>
 </html>
