@@ -33,13 +33,11 @@ async function fetchAndCreateBanners() {
         header: true,
         skipEmptyLines: true,
         complete: function(results) {
-            console.log(results);  // Logar os resultados para o console
             const rows = results.data;
             const bannersDiv = document.getElementById('banners');
 
             rows.forEach(row => {
-                console.log(row);  // Logar cada linha para o console
-                const description = row['DESCRIÇÃO'] ? row['DESCRIÇÃO'].replace(/\/\//g, '<br>') : '';  // Verifica se 'DESCRIÇÃO' é definido antes de chamar replace
+                const description = row['DESCRIÇÃO'].replace(/\/\//g, '<br>');  // Substitui // por quebras de linha
                 const bannerDiv = document.createElement('div');
                 bannerDiv.className = 'banner';
                 bannerDiv.innerHTML = `
@@ -60,7 +58,6 @@ async function fetchAndCreateBanners() {
 }
 
 window.onload = fetchAndCreateBanners;
-
 
     
 </script>
