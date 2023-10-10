@@ -118,6 +118,16 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script>
+
+function cleanPrice(price) {
+    return parseFloat(price.replace(/[^\d.,]/g, '').replace(',', '.'));
+}
+
+
+
+
+
+    
 const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRISpWPTwJ4injNHN8jPJxhNOf9W-u8SrovI6_8G2pAQtRaxBaVareODZFXScsD5Yhnbes1fGIDLKW8/pub?output=csv';
 
 async function fetchAndCreateBanners() {
@@ -167,7 +177,7 @@ window.onload = fetchAndCreateBanners;
     let cartItems = [];
 
 function addToCart(bolao, preco) {
-    cartItems.push({ bolao, preco });
+    cartItems.push({ bolao, preco: cleanPrice(preco) });
     document.getElementById('cart-count').textContent = cartItems.length;
 }
 
@@ -176,8 +186,8 @@ function showCartReport() {
     reportContent.innerHTML = '';
     let totalPrice = 0;
     cartItems.forEach(item => {
-        reportContent.innerHTML += `<p>${item.bolao}: R$ ${item.preco}</p>`;
-        totalPrice += parseFloat(item.preco);
+        reportContent.innerHTML += `<p>${item.bolao}: R$ ${item.preco.toFixed(2)}</p>`;
+        totalPrice += item.preco;
     });
     document.getElementById('total-price').textContent = 'Total: R$ ' + totalPrice.toFixed(2);
     document.getElementById('cart-report').style.display = 'block';
