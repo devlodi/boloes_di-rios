@@ -57,8 +57,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script>
-const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRISpWPTwJ4injNHN8jPJxhNOf9W-u8SrovI6_8G2pAQtRaxBaVareODZFXScsD5Yhnbes1fGIDLKW8/pub?output=csv';
-
 async function fetchAndCreateBanners() {
     const response = await fetch(url);
     const csvText = await response.text();
@@ -71,7 +69,8 @@ async function fetchAndCreateBanners() {
             const bannersDiv = document.getElementById('banners');
 
             rows.forEach(row => {
-                const description = row['DESCRIÇÃO'] ? row['DESCRIÇÃO'].replace(/\/\//g, '<br>') : '';
+                // Verifique se a descrição existe e substitua as quebras de linha por <br>
+                const description = row['DESCRIÇÃO'] ? row['DESCRIÇÃO'].replace(/\n/g, '<br>') : '';
                 const bannerDiv = document.createElement('div');
                 bannerDiv.className = 'banner';
                 bannerDiv.innerHTML = `
