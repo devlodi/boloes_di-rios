@@ -147,7 +147,15 @@ async function fetchAndCreateBanners() {
                     const description = row['DESCRIÇÃO'] ? row['DESCRIÇÃO'].replace(/\n/g, '<br>') : '';
                     const bannerDiv = document.createElement('div');
                     bannerDiv.className = 'banner';
-                    bannerDiv.style.backgroundColor = row['COR'];  // Aplica a cor de fundo ao bannerDiv
+                    
+                    // Logar o valor da coluna "COR" no console
+                    console.log('Valor da coluna COR:', row['COR']);
+                    
+                    // Verificar se o valor da coluna "COR" é um código hexadecimal válido
+                    const hexColorRegex = /^#([0-9A-F]{3}){1,2}$/i;
+                    const backgroundColor = hexColorRegex.test(row['COR']) ? row['COR'] : '#FFFFFF';
+                    bannerDiv.style.backgroundColor = backgroundColor;  // Aplica a cor de fundo ao bannerDiv
+                    
                     bannerDiv.innerHTML = `
                         <div class="header">${row['NOME DO BOLÃO']}</div>
                         <p><strong>Loteria:</strong> ${row['LOTERIA']}</p>
