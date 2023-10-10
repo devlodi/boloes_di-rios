@@ -21,32 +21,38 @@
 
 <div id="banners"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script>
-
 const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRISpWPTwJ4injNHN8jPJxhNOf9W-u8SrovI6_8G2pAQtRaxBaVareODZFXScsD5Yhnbes1fGIDLKW8/pub?output=csv';
 
 async function fetchAndCreateBanners() {
     const response = await fetch(url);
     const csvText = await response.text();
-    const rows = csvText.split('\n').slice(1);  // Ignora o cabeçalho
-    const bannersDiv = document.getElementById('banners');
+    
+    Papa.parse(csvText, {
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            const rows = results.data;
+            const bannersDiv = document.getElementById('banners');
 
-    rows.forEach(row => {
-        const columns = row.split(',');
-        const bannerDiv = document.createElement('div');
-        bannerDiv.className = 'banner';
-        bannerDiv.innerHTML = `
-            <div class="header">${columns[2]}</div>  <!-- Nome do Bolão -->
-            <p><strong>Loteria:</strong> ${columns[0]}</p>
-            <p><strong>Grupo:</strong> ${columns[1]}</p>
-            <p><strong>Descrição:</strong> ${columns[3]}</p>
-            <p><strong>Concurso:</strong> ${columns[4]}</p>
-            <p><strong>Data:</strong> ${columns[5]}</p>
-            <p><strong>Quantidade de Cotas:</strong> ${columns[6]}</p>
-            <p><strong>Preço da Cota:</strong> ${columns[7]}</p>
-            <p><strong>Prêmio:</strong> ${columns[8]}</p>
-        `;
-        bannersDiv.appendChild(bannerDiv);
+            rows.forEach(row => {
+                const bannerDiv = document.createElement('div');
+                bannerDiv.className = 'banner';
+                bannerDiv.innerHTML = `
+                    <div class="header">${row['NOME DO BOLÃO']}</div>
+                    <p><strong>Loteria:</strong> ${row['LOTERIA']}</p>
+                    <p><strong>Grupo:</strong> ${row['GRUPO']}</p>
+                    <p><strong>Descrição:</strong> ${row['DESCRIÇÃO']}</p>
+                    <p><strong>Concurso:</strong> ${row['CONCURSO']}</p>
+                    <p><strong>Data:</strong> ${row['DATA']}</p>
+                    <p><strong>Quantidade de Cotas:</strong> ${row['QUANTIDADE DE COTAS']}</p>
+                    <p><strong>Preço da Cota:</strong> ${row['PREÇO DA COTA']}</p>
+                    <p><strong>Prêmio:</strong> ${row['PRÊMIO']}</p>
+                `;
+                bannersDiv.appendChild(bannerDiv);
+            });
+        }
     });
 }
 
