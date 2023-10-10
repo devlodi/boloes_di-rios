@@ -121,106 +121,104 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script>
 
-(function() {
-    // Função para limpar e converter o preço para um número
-    function cleanPrice(price) {
-        return parseFloat(price.replace(/[^\d.,]/g, '').replace(',', '.'));
-    }
+function cleanPrice(price) {
+    return parseFloat(price.replace(/[^\d.,]/g, '').replace(',', '.'));
+}
 
-    const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRISpWPTwJ4injNHN8jPJxhNOf9W-u8SrovI6_8G2pAQtRaxBaVareODZFXScsD5Yhnbes1fGIDLKW8/pub?output=csv';
-    const cartItems = [];
 
-    // Função para atualizar a contagem de itens no carrinho
-    function updateCartCount() {
-        document.getElementById('cart-count').textContent = cartItems.length;
-    }
 
-    // Função para calcular o preço total
-    function calculateTotalPrice() {
-        return cartItems.reduce((sum, item) => sum + parseFloat(item.preco), 0).toFixed(2);
-    }
 
-    // Função para adicionar item ao carrinho
-    function addToCart(bolao, preco) {
-        cartItems.push({ bolao, preco: cleanPrice(preco) });
-        updateCartCount();
-    }
 
-    // Função para mostrar o relatório do carrinho
-    function showCartReport() {
-        const reportContent = document.getElementById('report-content');
-        const reportItems = cartItems.map(item => `<p>${item.bolao}: R$ ${item.preco.toFixed(2)}</p>`);
-        reportContent.innerHTML = reportItems.join('');
-        document.getElementById('total-price').textContent = 'Total: R$ ' + calculateTotalPrice();
-        document.getElementById('cart-report').style.display = 'block';
-    }
-
-    // Função para fechar o relatório do carrinho
-    function closeReport() {
-        document.getElementById('cart-report').style.display = 'none';
-    }
-
-    // Função para enviar pedido via WhatsApp
-    function sendToWhatsApp() {
-        let message = 'Marcelo, quero reservar os bolões:\n';
-        cartItems.forEach(item => {
-            message += `${item.bolao}: R$ ${item.preco}\n`;
-        });
-        message += `Total: R$ ${calculateTotalPrice()}`;
-        const whatsappUrl = `https://wa.me/5551984036223?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
-    }
-
-    // Função para buscar e criar banners a partir de uma planilha Google
-    async function fetchAndCreateBanners() {
-        try {
-            const response = await fetch(url);
-            const csvText = await response.text();
-            
-            Papa.parse(csvText, {
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    const rows = results.data;
-                    const bannersDiv = document.getElementById('banners');
     
-                    rows.forEach(row => {
-                        const description = row['DESCRIÇÃO'] ? row['DESCRIÇÃO'].replace(/\n/g, '<br>') : '';
-                        const bannerDiv = document.createElement('div');
-                        bannerDiv.className = 'banner';
-                        
-                        const hexColorRegex = /^#([0-9A-F]{3}){1,2}$/i;
-                        const backgroundColor = hexColorRegex.test(row['COR']) ? row['COR'] : '#FFFFFF';
-                        bannerDiv.style.backgroundColor = backgroundColor;
-                        
-                        bannerDiv.innerHTML = `
-                            <div class="header">${row['NOME DO BOLÃO']}</div>
-                            <p><strong>Loteria:</strong> ${row['LOTERIA']}</p>
-                            <p><strong>Grupo:</strong> ${row['GRUPO']}</p>
-                            <p><strong>Descrição:</strong> ${description}</p>
-                            <p><strong>Concurso:</strong> ${row['CONCURSO']}</p>
-                            <p><strong>Data:</strong> ${row['DATA']}</p>
-                            <p><strong>Quantidade de Cotas:</strong> ${row['QUANTIDADE DE COTAS']}</p>
-                            <p><strong>Preço da Cota:</strong> ${row['PREÇO DA COTA']}</p>
-                            <p><strong>Prêmio:</strong> ${row['PRÊMIO']}</p>
-                        `;
-                        const addToCartButton = document.createElement('button');
-                        addToCartButton.textContent = 'Colocar no carrinho';
-                        addToCartButton.addEventListener('click', () => addToCart(row['NOME DO BOLÃO'], row['PREÇO DA COTA']));
-                        bannerDiv.appendChild(addToCartButton);
-                        bannersDiv.appendChild(bannerDiv);
-                    });
-                }
-            });
-        } catch (error) {
-            console.error('Erro ao buscar e criar banners:', error.message);
-        }
+const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRISpWPTwJ4injNHN8jPJxhNOf9W-u8SrovI6_8G2pAQtRaxBaVareODZFXScsD5Yhnbes1fGIDLKW8/pub?output=csv';
+
+async function fetchAndCreateBanners() {
+    try {
+        const response = await fetch(url);
+        const csvText = await response.text();
+        
+        Papa.parse(csvText, {
+            header: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                const rows = results.data;
+                const bannersDiv = document.getElementById('banners');
+
+                rows.forEach(row => {
+                    // Verifique se a descrição existe e substitua as quebras de linha por <br>
+                    const description = row['DESCRIÇÃO'] ? row['DESCRIÇÃO'].replace(/\n/g, '<br>') : '';
+                    const bannerDiv = document.createElement('div');
+                    bannerDiv.className = 'banner';
+                    
+                    // Logar o valor da coluna "COR" no console
+                    console.log('Valor da coluna COR:', row['COR']);
+                    
+                    // Verificar se o valor da coluna "COR" é um código hexadecimal válido
+                    const hexColorRegex = /^#([0-9A-F]{3}){1,2}$/i;
+                    const backgroundColor = hexColorRegex.test(row['COR']) ? row['COR'] : '#FFFFFF';
+                    bannerDiv.style.backgroundColor = backgroundColor;  // Aplica a cor de fundo ao bannerDiv
+                    
+                    bannerDiv.innerHTML = `
+                        <div class="header">${row['NOME DO BOLÃO']}</div>
+                        <p><strong>Loteria:</strong> ${row['LOTERIA']}</p>
+                        <p><strong>Grupo:</strong> ${row['GRUPO']}</p>
+                        <p><strong>Descrição:</strong> ${description}</p>
+                        <p><strong>Concurso:</strong> ${row['CONCURSO']}</p>
+                        <p><strong>Data:</strong> ${row['DATA']}</p>
+                        <p><strong>Quantidade de Cotas:</strong> ${row['QUANTIDADE DE COTAS']}</p>
+                        <p><strong>Preço da Cota:</strong> ${row['PREÇO DA COTA']}</p>
+                        <p><strong>Prêmio:</strong> ${row['PRÊMIO']}</p>
+                    `;
+                    const addToCartButton = document.createElement('button');
+                    addToCartButton.textContent = 'Colocar no carrinho';
+                    addToCartButton.addEventListener('click', () => addToCart(row['NOME DO BOLÃO'], row['PREÇO DA COTA']));
+                    bannerDiv.appendChild(addToCartButton);  // Adiciona o botão ao banner
+                    bannersDiv.appendChild(bannerDiv);
+                });
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao buscar e criar banners:', error);
     }
+}
 
-    window.onload = fetchAndCreateBanners;
-    document.querySelector('.cart').addEventListener('click', showCartReport);
-})();
+window.onload = fetchAndCreateBanners;
 
+    let cartItems = [];
+
+function addToCart(bolao, preco) {
+    cartItems.push({ bolao, preco: cleanPrice(preco) });
+    document.getElementById('cart-count').textContent = cartItems.length;
+}
+
+function showCartReport() {
+    const reportContent = document.getElementById('report-content');
+    reportContent.innerHTML = '';
+    let totalPrice = 0;
+    cartItems.forEach(item => {
+        reportContent.innerHTML += `<p>${item.bolao}: R$ ${item.preco.toFixed(2)}</p>`;
+        totalPrice += item.preco;
+    });
+    document.getElementById('total-price').textContent = 'Total: R$ ' + totalPrice.toFixed(2);
+    document.getElementById('cart-report').style.display = 'block';
+}
+
+function closeReport() {
+    document.getElementById('cart-report').style.display = 'none';
+}
+
+function sendToWhatsApp() {
+    let message = 'Marcelo, quero reservar os bolões:\n';
+    cartItems.forEach(item => {
+        message += `${item.bolao}: R$ ${item.preco}\n`;
+    });
+    const totalPrice = cartItems.reduce((sum, item) => sum + parseFloat(item.preco), 0);
+    message += `Total: R$ ${totalPrice.toFixed(2)}`;
+    const whatsappUrl = `https://wa.me/5551984036223?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+}
+
+document.querySelector('.cart').addEventListener('click', showCartReport);
 
 
 </script>
