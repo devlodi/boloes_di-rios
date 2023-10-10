@@ -77,14 +77,19 @@
 }
 
 .cart-report {
-    display: none;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
     position: fixed;
-    top: 0;
+    top: 50px;  /* ajuste conforme necessário para a altura do seu cabeçalho */
     left: 0;
     right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding-top: 60px;
+    background-color: #fff;
+    overflow: auto;
+    max-height: calc(100% - 50px);  /* ajuste conforme necessário para a altura do seu cabeçalho */
+}
+
+.cart-report.open {
+    transform: translateY(0);
 }
 
 .report-content {
@@ -200,11 +205,11 @@ function showCartReport() {
         totalPrice += item.preco;
     });
     document.getElementById('total-price').textContent = 'Total: R$ ' + totalPrice.toFixed(2);
-    document.getElementById('cart-report').style.display = 'block';
+    document.getElementById('cart-report').classList.add('open');
 }
 
 function closeReport() {
-    document.getElementById('cart-report').style.display = 'none';
+    document.getElementById('cart-report').classList.remove('open');
 }
 
 function sendToWhatsApp() {
