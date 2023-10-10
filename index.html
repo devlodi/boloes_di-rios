@@ -12,21 +12,22 @@
 
 }
 
-   .cart-report {
-            transform: translateY(-100%);
-            transition: transform 0.3s ease-in-out;
-            position: fixed;
-            top: 50px;  /* ajuste conforme necessário para a altura do seu cabeçalho */
-            left: 0;
-            right: 0;
-            background-color: #fff;
-            overflow: auto;
-            max-height: calc(100% - 50px);  /* ajuste conforme necessário para a altura do seu cabeçalho */
-        }
+.cart-report {
+    display: block; /* alterado de none para block */
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
+    position: fixed;
+    top: 50px; /* ajuste conforme necessário para a altura do seu cabeçalho */
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    overflow: auto;
+    max-height: calc(100% - 50px); /* ajuste conforme necessário para a altura do seu cabeçalho */
+}
+.cart-report.open {
+    transform: translateY(0);
+}
 
-        .cart-report.open {
-            transform: translateY(0);
-        }
 
         
 /* ... restante do seu CSS ... */
