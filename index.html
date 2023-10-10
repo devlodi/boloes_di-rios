@@ -37,13 +37,14 @@ async function fetchAndCreateBanners() {
             const bannersDiv = document.getElementById('banners');
 
             rows.forEach(row => {
+                const description = row['DESCRIÇÃO'].replace(/\/\//g, '<br>');  // Substitui // por quebras de linha
                 const bannerDiv = document.createElement('div');
                 bannerDiv.className = 'banner';
                 bannerDiv.innerHTML = `
                     <div class="header">${row['NOME DO BOLÃO']}</div>
                     <p><strong>Loteria:</strong> ${row['LOTERIA']}</p>
                     <p><strong>Grupo:</strong> ${row['GRUPO']}</p>
-                    <p><strong>Descrição:</strong> ${row['DESCRIÇÃO']}</p>
+                    <p><strong>Descrição:</strong> ${description}</p>
                     <p><strong>Concurso:</strong> ${row['CONCURSO']}</p>
                     <p><strong>Data:</strong> ${row['DATA']}</p>
                     <p><strong>Quantidade de Cotas:</strong> ${row['QUANTIDADE DE COTAS']}</p>
